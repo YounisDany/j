@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const notifications = document.getElementById('notifications');
     const futureReservations = document.getElementById('futureReservations');
     const sessionRecords = document.getElementById('session-records');
-    const hourlyReservations = document.getElementById('hourly-reservations');
     const matchBookingForm = document.getElementById('matchBookingForm');
     const matchNotifications = document.getElementById('matchNotifications');
 
@@ -28,7 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionElement.id = `session-${sessionNumber}`;
         sessionElement.innerHTML = `<h2>${sessionName}</h2><div id="countdown-${sessionNumber}"></div>
                                     <div>اسم الزبون: ${customerName}</div>
-                                    <div>وقت البدء: ${startTime.toLocaleTimeString()}</div>`;
+                                    <div>وقت البدء: ${startTime.toLocaleTimeString()}</div>
+                                    <button class="extend">تمديد الجلسة</button>
+                                    <button class="cancel">إلغاء الجلسة</button>`;
         notifications.appendChild(sessionElement);
 
         saveSessionToLocalStorage(sessionNumber, {
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     alert("خاصية النطق غير مدعومة في هذا المتصفح.");
                 }
+                alert(`جلسة ${sessionNumber} انتهى وقتهم`);
                 setTimeout(() => {
                     notifications.removeChild(sessionElement);
                     const recordElement = document.createElement('div');
@@ -70,6 +72,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateCountdown();
         const countdownInterval = setInterval(updateCountdown, 1000);
+
+        sessionElement.querySelector('.cancel').addEventListener('click', () => {
+            clearInterval(countdownInterval);
+            notifications.removeChild(sessionElement);
+            removeSessionFromLocalStorage(sessionNumber);
+        });
+
+        sessionElement.querySelector('.extend').addEventListener('click', () => {
+            const additionalTime = parseInt(prompt('أدخل وقت التمديد (بالدقائق):'), 10);
+            if (!isNaN(additionalTime) && additionalTime > 0) {
+                endTime = new Date(endTime.getTime() + additionalTime * 60000);
+                saveSessionToLocalStorage(sessionNumber, {
+                    customerName: customerName,
+                    startTime: startTime,
+                    endTime: endTime
+                });
+            }
+        });
     });
 
     futureBookingForm?.addEventListener('submit', function(event) {
@@ -83,6 +103,21 @@ document.addEventListener('DOMContentLoaded', function() {
         let endTime = new Date(startTime.getTime() + rentalTime * 60000);
         const sessionName = `جلسة ${sessionNumber}`;
 
+        // Check for conflicting reservations
+        const futureSessions = JSON.parse(localStorage.getItem('futureSessions')) || {};
+        for (const key in futureSessions) {
+            if (futureSessions[key].sessionNumber == sessionNumber) {
+                const existingStartTime = new Date(futureSessions[key].startTime);
+                const existingEndTime = new Date(futureSessions[key].endTime);
+                if ((startTime >= existingStartTime && startTime < existingEndTime) ||
+                    (endTime > existingStartTime && endTime <= existingEndTime) ||
+                    (startTime <= existingStartTime && endTime >= existingEndTime)) {
+                    alert(`جلسة ${sessionNumber} مشغولة بالفعل في الوقت المحدد.`);
+                    return;
+                }
+            }
+        }
+
         const futureSessionElement = document.createElement('div');
         futureSessionElement.className = 'session';
         futureSessionElement.innerHTML = `<h2>${sessionName}</h2>
@@ -94,7 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
         saveFutureSessionToLocalStorage(sessionNumber, {
             customerName: customerName,
             startTime: startTime,
-            endTime: endTime
+            endTime: endTime,
+            sessionNumber: sessionNumber
         });
     });
 
@@ -129,7 +165,9 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionElement.id = `session-${sessionNumber}`;
             sessionElement.innerHTML = `<h2>${sessionName}</h2><div id="countdown-${sessionNumber}"></div>
                                         <div>اسم الزبون: ${customerName}</div>
-                                        <div>وقت البدء: ${startTime.toLocaleTimeString()}</div>`;
+                                        <div>وقت البدء: ${startTime.toLocaleTimeString()}</div>
+                                        <button class="extend">تمديد الجلسة</button>
+                                        <button class="cancel">إلغاء الجلسة</button>`;
             document.getElementById('notifications').appendChild(sessionElement);
             updateCountdown();
             const countdownInterval = setInterval(updateCountdown, 1000);
@@ -151,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         alert("خاصية النطق غير مدعومة في هذا المتصفح.");
                     }
+                    alert(`جلسة ${sessionNumber} انتهى وقتهم`);
                     setTimeout(() => {
                         notifications.removeChild(sessionElement);
                         const recordElement = document.createElement('div');
@@ -164,6 +203,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 60000); // إزالة العنصر بعد دقيقة واحدة
                 }
             }
+
+            sessionElement.querySelector('.cancel').addEventListener('click', () => {
+                clearInterval(countdownInterval);
+                notifications.removeChild(sessionElement);
+                removeSessionFromLocalStorage(sessionNumber);
+            });
+
+            sessionElement.querySelector('.extend').addEventListener('click', () => {
+                const additionalTime = parseInt(prompt('أدخل وقت التمديد (بالدقائق):'), 10);
+                if (!isNaN(additionalTime) && additionalTime > 0) {
+                    endTime = new Date(endTime.getTime() + additionalTime * 60000);
+                    saveSessionToLocalStorage(sessionNumber, {
+                        customerName: customerName,
+                        startTime: startTime,
+                        endTime: endTime
+                    });
+                }
+            });
+
+            updateCountdown();
         }
     }
 

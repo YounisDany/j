@@ -9,40 +9,86 @@
 <body>
     <div class="container">
         <h1>نظام حجز الجلسات</h1>
-        <form id="bookingForm">
-            <label for="customerName">اسم الزبون:</label>
-            <input type="text" id="customerName" required>
-            <label for="sessionNumber">رقم الجلسة:</label>
-            <select id="sessionNumber">
-                <option value="1">جلسة 1</option>
-                <option value="2">جلسة 2</option>
-                <option value="3">جلسة 3</option>
-                <!-- Add more sessions as needed -->
-            </select>
-            <label for="rentalTime">مدة الإيجار (بالدقائق):</label>
-            <input type="number" id="rentalTime" min="1" required>
-            <button type="submit">بدء الجلسة</button>
-        </form>
+        <div class="form-container">
+            <form id="bookingForm">
+                <label for="customerName">اسم الزبون:</label>
+                <input type="text" id="customerName" required>
+                <label for="sessionNumber">رقم الجلسة:</label>
+                <select id="sessionNumber">
+                    <!-- 20 جلسة عادية -->
+                    <option value="1">جلسة عادية 1</option>
+                    <option value="2">جلسة عادية 2</option>
+                    <option value="3">جلسة عادية 3</option>
+                    <option value="4">جلسة عادية 4</option>
+                    <option value="5">جلسة عادية 5</option>
+                    <option value="6">جلسة عادية 6</option>
+                    <option value="7">جلسة عادية 7</option>
+                    <option value="8">جلسة عادية 8</option>
+                    <option value="9">جلسة عادية 9</option>
+                    <option value="10">جلسة عادية 10</option>
+                    <option value="11">جلسة عادية 11</option>
+                    <option value="12">جلسة عادية 12</option>
+                    <option value="13">جلسة عادية 13</option>
+                    <option value="14">جلسة عادية 14</option>
+                    <option value="15">جلسة عادية 15</option>
+                    <option value="16">جلسة عادية 16</option>
+                    <option value="17">جلسة عادية 17</option>
+                    <option value="18">جلسة عادية 18</option>
+                    <option value="19">جلسة عادية 19</option>
+                    <option value="20">جلسة عادية 20</option>
+                    <!-- 3 جلسات خاصة -->
+                    <option value="21">جلسة خاصة 1</option>
+                    <option value="22">جلسة خاصة 2</option>
+                    <option value="23">جلسة خاصة 3</option>
+                </select>
+                <label for="rentalTime">مدة الإيجار (بالدقائق):</label>
+                <input type="number" id="rentalTime" min="1" required>
+                <button type="submit">بدء الجلسة</button>
+            </form>
+        </div>
 
         <h2>حجز الجلسات للساعات القادمة</h2>
-        <form id="futureBookingForm">
-            <label for="futureCustomerName">اسم الزبون:</label>
-            <input type="text" id="futureCustomerName" required>
-            <label for="futureSessionNumber">رقم الجلسة:</label>
-            <select id="futureSessionNumber">
-                <option value="1">جلسة 1</option>
-                <option value="2">جلسة 2</option>
-                <option value="3">جلسة 3</option>
-                <!-- Add more sessions as needed -->
-            </select>
-            <label for="futureDate">التاريخ:</label>
-            <input type="date" id="futureDate" required>
-            <label for="futureTime">الوقت:</label>
-            <input type="time" id="futureTime" required>
-            <label for="futureRentalTime">مدة الإيجار (بالدقائق):</label>
-            <input type="number" id="futureRentalTime" min="1" required>
-            <button type="submit">حجز الجلسة</button>
-        </form>
+        <div class="form-container">
+            <form id="futureBookingForm">
+                <label for="futureCustomerName">اسم الزبون:</label>
+                <input type="text" id="futureCustomerName" required>
+                <label for="futureSessionNumber">رقم الجلسة:</label>
+                <select id="futureSessionNumber">
+                    <!-- 20 جلسة عادية -->
+                    <option value="1">جلسة عادية 1</option>
+                    <option value="2">جلسة عادية 2</option>
+                    <option value="3">جلسة عادية 3</option>
+                    <option value="4">جلسة عادية 4</option>
+                    <option value="5">جلسة عادية 5</option>
+                    <option value="6">جلسة عادية 6</option>
+                    <option value="7">جلسة عادية 7</option>
+                    <option value="8">جلسة عادية 8</option>
+                    <option value="9">جلسة عادية 9</option>
+                    <option value="10">جلسة عادية 10</option>
+                    <option value="11">جلسة عادية 11</option>
+                    <option value="12">جلسة عادية 12</option>
+                    <option value="13">جلسة عادية 13</option>
+                    <option value="14">جلسة عادية 14</option>
+                    <option value="15">جلسة عادية 15</option>
+                    <option value="16">جلسة عادية 16</option>
+                    <option value="17">جلسة عادية 17</option>
+                    <option value="18">جلسة عادية 18</option>
+                    <option value="19">جلسة عادية 19</option>
+                    <option value="20">جلسة عادية 20</option>
+                    <!-- 3 جلسات خاصة -->
+                    <option value="21">جلسة خاصة 1</option>
+                    <option value="22">جلسة خاصة 2</option>
+                    <option value="23">جلسة خاصة 3</option>
+                </select>
+                <label for="futureDate">التاريخ:</label>
+                <input type="date" id="futureDate" required>
+                <label for="futureTime">الوقت:</label>
+                <input type="time" id="futureTime" required>
+                <label for="futureRentalTime">مدة الإيجار (بالدقائق):</label>
+                <input type="number" id="futureRentalTime" min="1" required>
+                <button type="submit">حجز الجلسة</button>
+            </form>
+        </div>
 
         <h2>الجلسات المحجوزة مسبقًا</h2>
         <div id="futureReservations"></div>
@@ -50,6 +96,9 @@
         <h2>الجلسات المحجوزة حاليًا</h2>
         <div id="notifications"></div>
         
+        <h2>السجلات السابقة</h2>
+        <div id="session-records"></div>
+
         <nav>
             <a href="sessions.html">عرض الجلسات المنتهية</a> |
             <a href="matches.html">حجز جلسات المباريات</a>

@@ -24,8 +24,28 @@
             <button type="submit">بدء الجلسة</button>
         </form>
 
-        <h2>الجلسات المحجوزة بالساعات</h2>
-        <div id="hourly-reservations"></div>
+        <h2>حجز الجلسات للساعات القادمة</h2>
+        <form id="futureBookingForm">
+            <label for="futureCustomerName">اسم الزبون:</label>
+            <input type="text" id="futureCustomerName" required>
+            <label for="futureSessionNumber">رقم الجلسة:</label>
+            <select id="futureSessionNumber">
+                <option value="1">جلسة 1</option>
+                <option value="2">جلسة 2</option>
+                <option value="3">جلسة 3</option>
+                <!-- Add more sessions as needed -->
+            </select>
+            <label for="futureDate">التاريخ:</label>
+            <input type="date" id="futureDate" required>
+            <label for="futureTime">الوقت:</label>
+            <input type="time" id="futureTime" required>
+            <label for="futureRentalTime">مدة الإيجار (بالدقائق):</label>
+            <input type="number" id="futureRentalTime" min="1" required>
+            <button type="submit">حجز الجلسة</button>
+        </form>
+
+        <h2>الجلسات المحجوزة مسبقًا</h2>
+        <div id="futureReservations"></div>
 
         <h2>الجلسات المحجوزة حاليًا</h2>
         <div id="notifications"></div>

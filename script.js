@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const bookingForm = document.getElementById('bookingForm');
+    const futureBookingForm = document.getElementById('futureBookingForm');
     const notifications = document.getElementById('notifications');
+    const futureReservations = document.getElementById('futureReservations');
     const sessionRecords = document.getElementById('session-records');
     const hourlyReservations = document.getElementById('hourly-reservations');
     const matchBookingForm = document.getElementById('matchBookingForm');
@@ -70,17 +72,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const countdownInterval = setInterval(updateCountdown, 1000);
     });
 
-    matchBookingForm?.addEventListener('submit', function(event) {
+    futureBookingForm?.addEventListener('submit', function(event) {
         event.preventDefault();
-        const matchDate = document.getElementById('matchDate').value;
-        const matchSessionNumber = document.getElementById('matchSessionNumber').value;
-        const sessionName = `جلسة مباراة ${matchSessionNumber}`;
-        const matchElement = document.createElement('div');
-        matchElement.className = 'session';
-        matchElement.innerHTML = `<h2>${sessionName}</h2><div>تاريخ المباراة: ${matchDate}</div>`;
-        matchNotifications.appendChild(matchElement);
-        saveMatchToLocalStorage(matchSessionNumber, {
-            matchDate: matchDate
+        const customerName = document.getElementById('futureCustomerName').value;
+        const sessionNumber = document.getElementById('futureSessionNumber').value;
+        const rentalTime = parseInt(document.getElementById('futureRentalTime').value, 10);
+        const date = document.getElementById('futureDate').value;
+        const time = document.getElementById('futureTime').value;
+        const startTime = new Date(`${date}T${time}:00`);
+        let endTime = new Date(startTime.getTime() + rentalTime * 60000);
+        const sessionName = `جلسة ${sessionNumber}`;
+
+        const futureSessionElement = document.createElement('div');
+        futureSessionElement.className = 'session';
+        futureSessionElement.innerHTML = `<h2>${sessionName}</h2>
+                                          <div>اسم الزبون: ${customerName}</div>
+                                          <div>التاريخ: ${startTime.toLocaleDateString()}</div>
+                                          <div>الوقت: ${startTime.toLocaleTimeString()}</div>`;
+        futureReservations.appendChild(futureSessionElement);
+
+        saveFutureSessionToLocalStorage(sessionNumber, {
+            customerName: customerName,
+            startTime: startTime,
+            endTime: endTime
         });
     });
 
@@ -90,16 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('sessions', JSON.stringify(sessions));
     }
 
+    function saveFutureSessionToLocalStorage(sessionNumber, sessionData) {
+        const futureSessions = JSON.parse(localStorage.getItem('futureSessions')) || {};
+        futureSessions[sessionNumber] = sessionData;
+        localStorage.setItem('futureSessions', JSON.stringify(futureSessions));
+    }
+
     function removeSessionFromLocalStorage(sessionNumber) {
         const sessions = JSON.parse(localStorage.getItem('sessions')) || {};
         delete sessions[sessionNumber];
         localStorage.setItem('sessions', JSON.stringify(sessions));
-    }
-
-    function saveMatchToLocalStorage(sessionNumber, matchData) {
-        const matches = JSON.parse(localStorage.getItem('matches')) || {};
-        matches[sessionNumber] = matchData;
-        localStorage.setItem('matches', JSON.stringify(matches));
     }
 
     function loadSessionsFromLocalStorage() {
@@ -153,19 +167,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function loadMatchesFromLocalStorage() {
-        const matches = JSON.parse(localStorage.getItem('matches')) || {};
-        for (const sessionNumber in matches) {
-            const matchData = matches[sessionNumber];
-            const matchDate = matchData.matchDate;
-            const sessionName = `جلسة مباراة ${sessionNumber}`;
-            const matchElement = document.createElement('div');
-            matchElement.className = 'session';
-            matchElement.innerHTML = `<h2>${sessionName}</h2><div>تاريخ المباراة: ${matchDate}</div>`;
-            document.getElementById('matchNotifications').appendChild(matchElement);
+    function loadFutureSessionsFromLocalStorage() {
+        const futureSessions = JSON.parse(localStorage.getItem('futureSessions')) || {};
+        for (const sessionNumber in futureSessions) {
+            const sessionData = futureSessions[sessionNumber];
+            const startTime = new Date(sessionData.startTime);
+            const customerName = sessionData.customerName;
+            const sessionName = `جلسة ${sessionNumber}`;
+            const futureSessionElement = document.createElement('div');
+            futureSessionElement.className = 'session';
+            futureSessionElement.innerHTML = `<h2>${sessionName}</h2>
+                                              <div>اسم الزبون: ${customerName}</div>
+                                              <div>التاريخ: ${startTime.toLocaleDateString()}</div>
+                                              <div>الوقت: ${startTime.toLocaleTimeString()}</div>`;
+            document.getElementById('futureReservations').appendChild(futureSessionElement);
         }
     }
 
     loadSessionsFromLocalStorage();
-    loadMatchesFromLocalStorage();
+    loadFutureSessionsFromLocalStorage();
 });
